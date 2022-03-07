@@ -1,15 +1,23 @@
 import { useState } from 'react';
 import { Paper } from '@mui/material';
+
 import { CommentCounter } from '../CommentCounter/CommentCounter';
 
 import { CommentContent } from './CommentContent';
 import { CommentAction } from './CommentAction';
 import { UserInfo } from './UserInfo';
-
 import { ReplyToComment } from './ReplyToComment';
-import { CommentReplies } from './CommentReplies';
 
-const CommentBody = ({id, content, createdAt, score, user, replies = [], currentUser, replyingTo = '', handleModal}) => {
+const CommentBody = ({
+  id,
+  content,
+  createdAt,
+  score,
+  user,
+  currentUser,
+  replyingTo = '',
+  handleModal = Function.prototype,
+}) => {
   const [isReplyActive, setReplyActive] = useState(false);
 
   // TODO: получать из стора
@@ -47,35 +55,27 @@ const CommentBody = ({id, content, createdAt, score, user, replies = [], current
         gap: 3,
       }}
     >
-      <div style={{
-        gridArea: 'info'
-      }}>
-        <UserInfo
-          username={user.username}
-          avatar={user.image.png}
-          createdAt={createdAt}
-          isCurrentUser={isCurrentUser}
-        />
-      </div>
-      <div style={{
-        gridArea: 'content'
-      }}>
-        <CommentContent replyingTo={replyingTo} content={content} />
-      </div>
+
+      <UserInfo
+        username={user.username}
+        avatar={user.image.png}
+        createdAt={createdAt}
+        isCurrentUser={isCurrentUser}
+      />
+
+      <CommentContent replyingTo={replyingTo} content={content} />
+      
+      <CommentAction
+        type={isCurrentUser ? 'custom' : 'reply'}
+        handleReply={handleReply}
+        handleModal={handleModal}
+      />
+
       <div style={{
         gridArea: 'counter',
         justifySelf: 'start',
       }}>
         <CommentCounter count={score} />
-      </div>
-      <div style={{
-        gridArea: 'actions'
-      }}>
-        <CommentAction
-          type={isCurrentUser ? 'custom' : 'reply'}
-          handleReply={handleReply}
-          handleModal={handleModal}
-        />
       </div>
     </Paper>
 
@@ -85,10 +85,6 @@ const CommentBody = ({id, content, createdAt, score, user, replies = [], current
         username={user.username}
         onClose={closeReply}
       />
-    )}
-
-    {!!replies.length && (
-      <CommentReplies replies={replies} />
     )}
 
     </>

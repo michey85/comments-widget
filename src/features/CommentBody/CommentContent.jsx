@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 
 const CommentContent = ({replyingTo, content}) => {
   return (
-    <Typography>
+    <Typography gridArea="content">
           {replyingTo && (
             <Typography
               component="span"

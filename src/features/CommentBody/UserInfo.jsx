@@ -6,7 +6,12 @@ export const UserInfo = ({
     createdAt,
     isCurrentUser,
 }) => (
-  <Stack spacing={2} direction="row" alignItems="center">
+  <Stack
+    spacing={2}
+    direction="row"
+    alignItems="center"
+    gridArea="info"
+  >
     <Avatar alt={username} src={avatar} />
     <Typography>
       {username}

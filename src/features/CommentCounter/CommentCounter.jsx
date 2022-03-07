@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Add, Remove } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
 
-const CommentCounter = ({count = 0}) => {
+const CommentCounter = ({count = 0, onIncrement, onDecrement}) => {
   return (
     <Stack
       direction={{xs: 'row', md: 'column'}}
@@ -32,7 +32,7 @@ const CommentCounter = ({count = 0}) => {
       <Typography
         component="span"
       >
-        <Add scale={0.75}/>
+        <Add scale={0.75} onClick={onIncrement}/>
       </Typography>
       <Typography>
         {count}
@@ -40,7 +40,7 @@ const CommentCounter = ({count = 0}) => {
       <Typography
         component="span" 
       >
-        <Remove scale={0.75} />
+        <Remove scale={0.75} onClick={onDecrement} />
       </Typography>
     </Stack>
   )
