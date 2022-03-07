@@ -8,7 +8,6 @@ export const CommentAction = ({ type = 'reply' }) => {
     return (
       <Button
         variant='text'
-        color='secondary'
         startIcon={<ReplyIcon />}
         sx={{
           textTransform: 'none',
@@ -27,6 +26,7 @@ export const CommentAction = ({ type = 'reply' }) => {
     <Stack direction='row' spacing={2}>
       <Button
         variant='text'
+        color='secondary'
         startIcon={<DeleteIcon />}
         sx={{
           textTransform: 'none',
