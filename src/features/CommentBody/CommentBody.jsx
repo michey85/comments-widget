@@ -9,8 +9,11 @@ import { UserInfo } from './UserInfo';
 import { ReplyToComment } from './ReplyToComment';
 import { CommentReplies } from './CommentReplies';
 
-const CommentBody = ({id, content, createdAt, score, user, replies = [], isCurrentUser, replyingTo = ''}) => {
+const CommentBody = ({id, content, createdAt, score, user, replies = [], currentUser, replyingTo = '', handleModal}) => {
   const [isReplyActive, setReplyActive] = useState(false);
+
+  // TODO: получать из стора
+  const isCurrentUser = currentUser === user.username;
 
   const handleReply = () => {
     setReplyActive(true)
@@ -18,8 +21,6 @@ const CommentBody = ({id, content, createdAt, score, user, replies = [], isCurre
   const closeReply = () => {
     setReplyActive(false)
   }
-
-  // TODO: currentUser -> Delete|Edit
 
   return (
     <>
@@ -53,6 +54,7 @@ const CommentBody = ({id, content, createdAt, score, user, replies = [], isCurre
           username={user.username}
           avatar={user.image.png}
           createdAt={createdAt}
+          isCurrentUser={isCurrentUser}
         />
       </div>
       <div style={{
@@ -72,6 +74,7 @@ const CommentBody = ({id, content, createdAt, score, user, replies = [], isCurre
         <CommentAction
           type={isCurrentUser ? 'custom' : 'reply'}
           handleReply={handleReply}
+          handleModal={handleModal}
         />
       </div>
     </Paper>

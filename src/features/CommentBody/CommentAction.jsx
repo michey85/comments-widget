@@ -3,7 +3,7 @@ import { ReactComponent as ReplyIcon } from '../../images/icon-reply.svg';
 import { ReactComponent as DeleteIcon } from '../../images/icon-delete.svg';
 import { ReactComponent as EditIcon } from '../../images/icon-edit.svg';
 
-export const CommentAction = ({ type = 'reply', handleReply }) => {
+export const CommentAction = ({ type = 'reply', handleReply, handleModal }) => {
   if (type === 'reply') {
     return (
       <Button
@@ -37,6 +37,7 @@ export const CommentAction = ({ type = 'reply', handleReply }) => {
             opacity: 0.6,
           }
         }}
+        onClick={() => handleModal(true)}
       >
         Delete
       </Button>
@@ -50,6 +51,7 @@ export const CommentAction = ({ type = 'reply', handleReply }) => {
             opacity: 0.6,
           }
         }}
+        onClick={handleReply}
       >
         Edit
       </Button>

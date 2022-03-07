@@ -69,7 +69,18 @@ theme = createTheme(theme, {
           },
         }
       }
-    }
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          color: theme.palette.grey['50'],
+          backgroundColor: theme.palette.primary.main,
+          borderRadius: '5px',
+          height: 'auto',
+          lineHeight: 1.8,
+        }
+      }
+    },
   }
 })
 
