@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Paper, Avatar, TextField, Button } from '@mui/material';
 
 
-const CommentForm = ({type = 'comment'}) => {
+const CommentForm = ({type = 'comment', replyingTo = ''}) => {
   // TODO: get from state
   const user = {
     avatar: './images/avatars/image-juliusomo.png',
@@ -19,6 +19,7 @@ const CommentForm = ({type = 'comment'}) => {
         alignItems: 'flex-start',
         gap: 2,
       }}
+      onClick={(e) => e.stopPropagation()}
     >
       <Avatar alt={user.username} src={user.avatar} />
       <TextField
@@ -26,6 +27,7 @@ const CommentForm = ({type = 'comment'}) => {
         rows={4}
         placeholder="Add a comment..."
         fullWidth
+        defaultValue={replyingTo ? `@${replyingTo}` : ''}
         sx={{}}
       />
       <Button>{type === 'reply' ? 'Reply' : 'Send'}</Button>
@@ -35,6 +37,7 @@ const CommentForm = ({type = 'comment'}) => {
 
 CommentForm.propTypes = {
   type: PropTypes.oneOf(['comment', 'reply']),
+  replyingTo: PropTypes.string,
 };
 
 export {CommentForm};

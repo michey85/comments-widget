@@ -1,12 +1,25 @@
-import { Paper, Divider, Box } from '@mui/material';
+import { useState } from 'react';
+import { Paper } from '@mui/material';
 import { CommentCounter } from '../CommentCounter/CommentCounter';
 
 import { CommentContent } from './CommentContent';
 import { CommentAction } from './CommentAction';
 import { UserInfo } from './UserInfo';
 
+import { ReplyToComment } from './ReplyToComment';
+import { CommentReplies } from './CommentReplies';
+
 const CommentBody = ({id, content, createdAt, score, user, replies = [], isCurrentUser, replyingTo = ''}) => {
-  // TODO: currentUser -> Delete|Edit, others -> Reply
+  const [isReplyActive, setReplyActive] = useState(false);
+
+  const handleReply = () => {
+    setReplyActive(true)
+  }
+  const closeReply = () => {
+    setReplyActive(false)
+  }
+
+  // TODO: currentUser -> Delete|Edit
 
   return (
     <>
@@ -56,38 +69,29 @@ const CommentBody = ({id, content, createdAt, score, user, replies = [], isCurre
       <div style={{
         gridArea: 'actions'
       }}>
-        <CommentAction type={isCurrentUser ? 'custom' : 'reply'} />
+        <CommentAction
+          type={isCurrentUser ? 'custom' : 'reply'}
+          handleReply={handleReply}
+        />
       </div>
     </Paper>
 
-    <>
-      {!!replies.length && (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: {xs: 2, md: 4},
-            pl: {xs: 0, md: 4},
-          }}
-        >
-          <Divider orientation='vertical' flexItem />
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2,
-            }}
-          >
-            {replies.map(reply => (
-              <CommentBody key={reply.id} {...reply} />
-            ))}
-          </Box>
-        </Box>
-      )}
-    </>
+    {isReplyActive && (
+      <ReplyToComment
+        isReplyActive={isReplyActive}
+        username={user.username}
+        onClose={closeReply}
+      />
+    )}
+
+    {!!replies.length && (
+      <CommentReplies replies={replies} />
+    )}
 
     </>
   )
 }
 
 export {CommentBody};
+
+
