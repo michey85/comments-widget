@@ -64,8 +64,7 @@ theme = createTheme(theme, {
     MuiTextField: {
       styleOverrides: {
         root: {
-          // background: 'black',
-          '& *:hover': {
+          '&:hover *': {
             cursor: 'pointer',
           },
         }

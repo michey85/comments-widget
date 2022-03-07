@@ -1,13 +1,15 @@
-import { Paper, Typography } from '@mui/material';
+import { Paper, Divider, Box } from '@mui/material';
 import { CommentCounter } from '../CommentCounter/CommentCounter';
 
+import { CommentContent } from './CommentContent';
 import { CommentAction } from './CommentAction';
 import { UserInfo } from './UserInfo';
 
-const CommentBody = ({id, content, createdAt, score, user, replies, isCurrentUser}) => {
+const CommentBody = ({id, content, createdAt, score, user, replies = [], isCurrentUser, replyingTo = ''}) => {
   // TODO: currentUser -> Delete|Edit, others -> Reply
 
   return (
+    <>
     <Paper
       elevation={0}
       sx={{
@@ -43,9 +45,7 @@ const CommentBody = ({id, content, createdAt, score, user, replies, isCurrentUse
       <div style={{
         gridArea: 'content'
       }}>
-        <Typography>
-          {content}
-        </Typography>
+        <CommentContent replyingTo={replyingTo} content={content} />
       </div>
       <div style={{
         gridArea: 'counter',
@@ -59,6 +59,34 @@ const CommentBody = ({id, content, createdAt, score, user, replies, isCurrentUse
         <CommentAction type={isCurrentUser ? 'custom' : 'reply'} />
       </div>
     </Paper>
+
+    <>
+      {!!replies.length && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            gap: {xs: 2, md: 4},
+            pl: {xs: 0, md: 4},
+          }}
+        >
+          <Divider orientation='vertical' flexItem />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+            }}
+          >
+            {replies.map(reply => (
+              <CommentBody key={reply.id} {...reply} />
+            ))}
+          </Box>
+        </Box>
+      )}
+    </>
+
+    </>
   )
 }
 
