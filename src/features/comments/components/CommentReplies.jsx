@@ -1,7 +1,7 @@
 import { Divider, Box } from '@mui/material';
-import { CommentBody } from '../CommentBody/CommentBody';
+import { CommentBody } from './CommentBody';
 
-export const CommentReplies = ({ replies, handleModal }) => (
+export const CommentReplies = ({ replies, handleModal, commentId }) => (
   <Box
     sx={{
       display: 'flex',
@@ -19,7 +19,12 @@ export const CommentReplies = ({ replies, handleModal }) => (
       }}
     >
       {replies.map(reply => (
-        <CommentBody key={reply.id} {...reply} handleModal={handleModal} />
+        <CommentBody
+          {...reply}
+          key={reply.id}
+          commentId={commentId}
+          handleModal={handleModal}
+        />
       ))}
     </Box>
   </Box>

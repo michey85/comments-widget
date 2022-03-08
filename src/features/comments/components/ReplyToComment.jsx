@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { CommentForm } from '../CommentForm';
 
-export const ReplyToComment = ({ username, onClose }) => {
+import { CommentForm } from './CommentForm';
+
+export const ReplyToComment = ({ username, onClose, commentId }) => {
   const handleEsc = (e) => {
     if (e.code === 'Escape') onClose();
   }
@@ -16,9 +17,14 @@ export const ReplyToComment = ({ username, onClose }) => {
       document.removeEventListener('click', onClose);
       document.removeEventListener('keypress', handleEsc);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <CommentForm replyingTo={username} />
+    <CommentForm
+      type='reply'
+      replyingTo={username}
+      commentId={commentId}
+    />
   );
 };

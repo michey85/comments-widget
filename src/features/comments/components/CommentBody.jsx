@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Paper } from '@mui/material';
 
-import { CommentCounter } from '../CommentCounter/CommentCounter';
-
+import { CommentCounter } from './CommentCounter';
 import { CommentContent } from './CommentContent';
 import { CommentAction } from './CommentAction';
 import { UserInfo } from './UserInfo';
 import { ReplyToComment } from './ReplyToComment';
+import { useSelector } from 'react-redux';
+import { selectUserName } from '../../user/user-slice';
 
 const CommentBody = ({
   id,
@@ -14,14 +15,17 @@ const CommentBody = ({
   createdAt,
   score,
   user,
-  currentUser,
   replyingTo = '',
   handleModal = Function.prototype,
+  commentId,
 }) => {
   const [isReplyActive, setReplyActive] = useState(false);
 
-  // TODO: получать из стора
-  const isCurrentUser = currentUser === user.username;
+  const currentUserName = useSelector(selectUserName)
+  const isCurrentUser = currentUserName === user.username;
+
+  const isReply = !!commentId;
+  const replyId = commentId ? id : null;
 
   const handleReply = () => {
     setReplyActive(true)
@@ -55,7 +59,6 @@ const CommentBody = ({
         gap: 3,
       }}
     >
-
       <UserInfo
         username={user.username}
         avatar={user.image.png}
@@ -71,19 +74,18 @@ const CommentBody = ({
         handleModal={handleModal}
       />
 
-      <div style={{
-        gridArea: 'counter',
-        justifySelf: 'start',
-      }}>
-        <CommentCounter count={score} />
-      </div>
+      <CommentCounter
+        count={score}
+        replyId={replyId}
+        commentId={isReply ? commentId : id}
+      />
     </Paper>
 
     {isReplyActive && (
       <ReplyToComment
-        isReplyActive={isReplyActive}
         username={user.username}
         onClose={closeReply}
+        commentId={commentId}
       />
     )}
 

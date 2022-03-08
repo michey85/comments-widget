@@ -28,7 +28,7 @@ const CommentDelete = ({open, closeModal}) => {
 
         <Stack direction="row" spacing={2}>
           <Button sx={{color: 'grey.50', bgcolor: 'grey.500'}} onClick={closeModal}>
-            No, cancel
+            Cancel
           </Button>
           <Button color="secondary" onClick={closeModal}>
             Yes, delete
