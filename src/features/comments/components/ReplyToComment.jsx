@@ -2,7 +2,12 @@ import { useEffect } from 'react';
 
 import { CommentForm } from './CommentForm';
 
-export const ReplyToComment = ({ username, onClose, commentId }) => {
+export const ReplyToComment = ({
+  onClose,
+  commentId,
+  isCurrentUser,
+  replyingTo,
+}) => {
   const handleEsc = (e) => {
     if (e.code === 'Escape') onClose();
   }
@@ -22,8 +27,8 @@ export const ReplyToComment = ({ username, onClose, commentId }) => {
 
   return (
     <CommentForm
-      type='reply'
-      replyingTo={username}
+      type={isCurrentUser ? 'edit' : 'reply'}
+      replyingTo={replyingTo}
       commentId={commentId}
     />
   );

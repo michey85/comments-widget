@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { commentReducer } from './features/comments/comments-slice';
 
-import { modalReducer } from './features/modal';
+import { commentReducer } from './features/comments/comments-slice';
+import { modalReducer, showModal } from './features/modal';
 import { userReducer } from './features/user/user-slice';
 
 const initialState = {
@@ -74,6 +74,7 @@ const initialState = {
   }
 }
 
+// TODO: ignore serializable for modals
 export const store = configureStore({
   reducer: {
     comments: commentReducer,
@@ -81,4 +82,10 @@ export const store = configureStore({
     modal: modalReducer,
   },
   preloadedState: initialState,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [showModal.toString()],
+      ignoredPaths: ['modal'],
+    }
+  })
 });

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Stack, Typography } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
@@ -21,20 +22,14 @@ const wrapperStyles = {
   '& > span:hover': {
     cursor: 'pointer',
   },
-  '& svg': {
-    opacity: 0.7,
-  },
-  '& svg:hover': {
-    opacity: 1,
-  },
 }
 
-// TODO: disable buttons for own comments
-// TODO: only one + or - from currentUser
-const CommentCounter = ({count = 0, commentId, replyId}) => {
+const CommentCounter = ({count = 0, commentId, replyId, isCurrentUser}) => {
+  const [currentChoose, setCurrentChoose] = useState(0);
   const dispatch = useDispatch();
 
   const onIncrement = () => {
+    setCurrentChoose(1);
     if (replyId) {
       dispatch(incReplyScore({commentId, replyId}));
     } else {
@@ -42,6 +37,7 @@ const CommentCounter = ({count = 0, commentId, replyId}) => {
     }
   };
   const onDecrement = () => {
+    setCurrentChoose(-1);
     if (replyId) {
       dispatch(decReplyScore({commentId, replyId}));
     } else {
@@ -55,7 +51,17 @@ const CommentCounter = ({count = 0, commentId, replyId}) => {
       sx={wrapperStyles}
     >
       <Typography component="span">
-        <Add scale={0.75} onClick={onIncrement}/>
+        <Add 
+          scale={0.75}
+          onClick={(!isCurrentUser && currentChoose < 1) ? onIncrement : null}
+          sx={{
+            cursor: isCurrentUser ? 'not-allowed' : 'inherit',
+            opacity: currentChoose === 1 ? 1 : 0.4,
+            '&:hover': {
+              opacity: 1,
+            }
+          }}
+        />
       </Typography>
 
       <Typography>
@@ -63,7 +69,17 @@ const CommentCounter = ({count = 0, commentId, replyId}) => {
       </Typography>
       
       <Typography component="span">
-        <Remove scale={0.75} onClick={onDecrement} />
+        <Remove
+          scale={0.75} 
+          onClick={(!isCurrentUser && currentChoose > -1) ? onDecrement : null}
+          sx={{
+            cursor: isCurrentUser ? 'not-allowed' : 'inherit',
+            opacity: currentChoose === -1 ? 1 : 0.4,
+            '&:hover': {
+              opacity: 1,
+            }
+          }}
+        />
       </Typography>
     </Stack>
   )

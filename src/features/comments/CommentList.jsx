@@ -9,7 +9,7 @@ import {CommentReplies} from './components/CommentReplies';
 import { selectComments } from './comments-slice';
 import { selectUserName } from '../user/user-slice';
 
-const CommentList = ({handleModal}) => {
+const CommentList = () => {
   const comments = useSelector(selectComments);
   const currentUserName = useSelector(selectUserName);
 
@@ -19,14 +19,12 @@ const CommentList = ({handleModal}) => {
         <Fragment key={comment.id}>
           <CommentBody
             currentUser={currentUserName}
-            handleModal={handleModal}
             {...comment}
           />
-          {!!comment.replies.length && (
+          {!!comment.replies?.length && (
             <CommentReplies
               commentId={comment.id}
               replies={comment.replies}
-              handleModal={handleModal}
             />
           )}
         </Fragment>

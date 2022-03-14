@@ -39,7 +39,7 @@ export const CommentAction = ({ type = 'reply', handleReply, handleModal }) => {
             opacity: 0.6,
           }
         }}
-        onClick={() => handleModal(true)}
+        onClick={handleModal}
       >
         Delete
       </Button>

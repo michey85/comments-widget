@@ -57,7 +57,7 @@ const commentsSlice = createSlice({
       const commentIndex = state.entities.findIndex(comment => commentId === comment.id);
 
       if (commentIndex > -1) {
-        state.entities = state
+        state.entities[commentIndex].replies = state
           .entities[commentIndex]
           .replies
           .filter(reply => reply.id !== replyId);

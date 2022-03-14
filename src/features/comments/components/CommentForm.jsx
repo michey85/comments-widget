@@ -7,8 +7,14 @@ import { selectUser } from '../../user/user-slice';
 import { addComment, addReply } from '../comments-slice';
 
 
+const commentType = {
+  comment: 'Send',
+  edit: 'Update',
+  reply: 'Reply', 
+}
+
 const CommentForm = ({type = 'comment', replyingTo = '', commentId}) => {
-  const [text, setText] = useState(replyingTo ? `@${replyingTo} ` : '');
+  const [text, setText] = useState(replyingTo ? replyingTo : '');
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
@@ -18,17 +24,17 @@ const CommentForm = ({type = 'comment', replyingTo = '', commentId}) => {
     if (!text) return;
 
     if (commentId) {
+      const [replyto, ...content] = text.split(' ');
+
       dispatch(addReply({
-        content: text,
+        content,
         user,
-        replyingTo,
+        replyingTo: replyto.slice(1), // without @
         commentId,
       }))
     } else {
-      const content = text.split(' ').slice(1).join(' ');
-
       dispatch(addComment({
-        content,
+        content: text,
         user,
       }));
       document.dispatchEvent('click');
@@ -60,14 +66,14 @@ const CommentForm = ({type = 'comment', replyingTo = '', commentId}) => {
         sx={{}}
       />
       <Button onClick={handleAddComment}>
-        {type === 'reply' ? 'Reply' : 'Send'}
+        {commentType[type]}
       </Button>
     </Paper>
   )
 }
 
 CommentForm.propTypes = {
-  type: PropTypes.oneOf(['comment', 'reply']),
+  type: PropTypes.oneOf(['comment', 'reply', 'edit']),
   replyingTo: PropTypes.string,
   commentId: PropTypes.oneOfType([
     PropTypes.number,

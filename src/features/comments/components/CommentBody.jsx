@@ -1,13 +1,16 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Paper } from '@mui/material';
+
+import { selectUserName } from '../../user/user-slice';
 
 import { CommentCounter } from './CommentCounter';
 import { CommentContent } from './CommentContent';
 import { CommentAction } from './CommentAction';
 import { UserInfo } from './UserInfo';
 import { ReplyToComment } from './ReplyToComment';
-import { useSelector } from 'react-redux';
-import { selectUserName } from '../../user/user-slice';
+
+import {useModal} from '../hooks/use-modal';
 
 const CommentBody = ({
   id,
@@ -16,22 +19,22 @@ const CommentBody = ({
   score,
   user,
   replyingTo = '',
-  handleModal = Function.prototype,
   commentId,
 }) => {
-  const [isReplyActive, setReplyActive] = useState(false);
+  const isReply = !!commentId;
+  const replyId = commentId ? id : null;
+
+  const handleModal = useModal(commentId || id, isReply ? id : null);
+  const [activeReply, setActiveReply] = useState('');
 
   const currentUserName = useSelector(selectUserName)
   const isCurrentUser = currentUserName === user.username;
 
-  const isReply = !!commentId;
-  const replyId = commentId ? id : null;
-
   const handleReply = () => {
-    setReplyActive(true)
+    setActiveReply(isCurrentUser ? content : `@${replyingTo || user.username} `);
   }
   const closeReply = () => {
-    setReplyActive(false)
+    setActiveReply('');
   }
 
   return (
@@ -78,14 +81,16 @@ const CommentBody = ({
         count={score}
         replyId={replyId}
         commentId={isReply ? commentId : id}
+        isCurrentUser={isCurrentUser}
       />
     </Paper>
 
-    {isReplyActive && (
+    {!!activeReply && (
       <ReplyToComment
-        username={user.username}
         onClose={closeReply}
         commentId={commentId}
+        isCurrentUser={isCurrentUser}
+        replyingTo={activeReply}
       />
     )}
 
@@ -94,5 +99,3 @@ const CommentBody = ({
 }
 
 export {CommentBody};
-
-
