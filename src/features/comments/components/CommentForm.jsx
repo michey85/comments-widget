@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Paper, Avatar, TextField, Button } from '@mui/material';
 
 import { selectUser } from '../../user/user-slice';
-import { addComment, addReply } from '../comments-slice';
+import { addComment, addReply, editComment, editReply } from '../comments-slice';
 
 
 const commentType = {
@@ -13,7 +13,7 @@ const commentType = {
   reply: 'Reply', 
 }
 
-const CommentForm = ({type = 'comment', replyingTo = '', commentId}) => {
+const CommentForm = ({type = 'comment', replyingTo = '', commentId, replyId}) => {
   const [text, setText] = useState(replyingTo ? replyingTo : '');
   const dispatch = useDispatch();
 
@@ -23,23 +23,49 @@ const CommentForm = ({type = 'comment', replyingTo = '', commentId}) => {
   const handleAddComment = () => {
     if (!text) return;
 
-    if (commentId) {
-      const [replyto, ...content] = text.split(' ');
+    switch(type) {
+      case 'comment': {
+        dispatch(addComment({
+          content: text,
+          user,
+        }));
+        break;
+      }
+      case 'edit': {
+        if (!replyId) {
+          dispatch(editComment({
+            commentId,
+            content: text,
+          }))
+        } else {
+          const content = text.split(' ').slice(1).join(' ');
 
-      dispatch(addReply({
-        content,
-        user,
-        replyingTo: replyto.slice(1), // without @
-        commentId,
-      }))
-    } else {
-      dispatch(addComment({
-        content: text,
-        user,
-      }));
-      document.dispatchEvent('click');
+          dispatch(editReply({
+            commentId,
+            replyId,
+            content,
+          }));
+        }
+        break;
+      }
+      case 'reply': {
+        const [replyto, ...content] = text.split(' ');
+
+        dispatch(addReply({
+          content: content.join(' '),
+          user,
+          replyingTo: replyto.slice(1), // without @
+          commentId,
+        }));
+
+        break;
+      }
+      default: {
+        throw new Error('Invalid form type');
+      }
     }
 
+    document.body.click();
     setText('');
   }
 
@@ -61,7 +87,7 @@ const CommentForm = ({type = 'comment', replyingTo = '', commentId}) => {
         rows={4}
         placeholder="Add a comment..."
         fullWidth
-        defaultValue={text}
+        value={text}
         onChange={(event) => setText(event.target.value)}
         sx={{}}
       />

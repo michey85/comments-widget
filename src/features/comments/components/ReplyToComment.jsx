@@ -5,6 +5,7 @@ import { CommentForm } from './CommentForm';
 export const ReplyToComment = ({
   onClose,
   commentId,
+  replyId,
   isCurrentUser,
   replyingTo,
 }) => {
@@ -30,6 +31,7 @@ export const ReplyToComment = ({
       type={isCurrentUser ? 'edit' : 'reply'}
       replyingTo={replyingTo}
       commentId={commentId}
+      replyId={replyId}
     />
   );
 };

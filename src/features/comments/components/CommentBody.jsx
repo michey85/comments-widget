@@ -31,7 +31,7 @@ const CommentBody = ({
   const isCurrentUser = currentUserName === user.username;
 
   const handleReply = () => {
-    setActiveReply(isCurrentUser ? content : `@${replyingTo || user.username} `);
+    setActiveReply(isCurrentUser ? `${replyingTo ? '@' + replyingTo + ' ' : ''}${content}` : `@${replyingTo || user.username} `);
   }
   const closeReply = () => {
     setActiveReply('');
@@ -88,7 +88,8 @@ const CommentBody = ({
     {!!activeReply && (
       <ReplyToComment
         onClose={closeReply}
-        commentId={commentId}
+        commentId={commentId || id}
+        replyId={commentId ? id : null}
         isCurrentUser={isCurrentUser}
         replyingTo={activeReply}
       />
